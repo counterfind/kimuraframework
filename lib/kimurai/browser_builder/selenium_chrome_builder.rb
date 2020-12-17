@@ -111,7 +111,10 @@ module Kimurai::BrowserBuilder
 
         chromedriver_path = Kimurai.configuration.chromedriver_path || "/usr/local/bin/chromedriver"
         service = Selenium::WebDriver::Service.chrome(path: chromedriver_path)
-        Capybara::Selenium::Driver.new(app, browser: :chrome, options: driver_options, service: service)
+        client = Selenium::WebDriver::Remote::Http::Default.new
+        client.open_timeout = 180
+        client.read_timeout = 180
+        Capybara::Selenium::Driver.new(app, browser: :chrome, options: driver_options, service: service, http_client: client)
       end
 
       # Create browser instance (Capybara session)
